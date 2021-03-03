@@ -1,0 +1,19 @@
+{
+    "name": "cloud-functions",
+    "version": "1.0.0",
+    "description": "",
+    "acs": "index.js",
+    "scripts": {
+      "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+      "@google-cloud/firestore": "4.9.1",
+      "@authenio/samlify-node-xmllint": "^2.0.0",
+      "@google-cloud/secret-manager": "^3.4.0",
+      "samlify": "^2.7.6",
+      "jsonwebtoken": "^8.5.1"
+    }
+  }
+  
