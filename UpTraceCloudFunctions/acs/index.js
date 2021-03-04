@@ -3,6 +3,9 @@ const {SecretManagerServiceClient} = require('@google-cloud/secret-manager');
 const jwt = require('jsonwebtoken');
 const validator = require('@authenio/samlify-node-xmllint');
 const saml = require('samlify');
+
+const controller = require('./Controllers/HelloController')
+
 saml.setSchemaValidator(validator);
 
 
@@ -97,6 +100,9 @@ function authenticateToken(req) {
   return valid;
 }
 
+
+
+
 exports.acs = async (req, res) => {
   try {
     await injectSecrects();
@@ -104,7 +110,10 @@ exports.acs = async (req, res) => {
     if(authenticateToken(req)) {
       //Case 1: JWT Valid
       console.log("Valid JWT")
-      res.redirect('https://attempt2-302520.ue.r.appspot.com/');
+      let functionParam = req.query.function
+      let helloController = new controller.HelloController(functionParam)
+      res.send(helloController.data);
+      
     } else if(req.body.SAMLResponse){
       //Case 2: SAML Request
       sp.parseLoginResponse(idp,'post',req).then(async parseResult => {

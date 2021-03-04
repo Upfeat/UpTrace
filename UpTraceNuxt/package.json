@@ -1,19 +1,21 @@
 {
-  "name": "UpTraceNuxt",
+  "name": "UpTrace",
   "version": "1.0.0",
   "private": true,
   "scripts": {
     "dev": "nuxt",
     "build": "nuxt build",
     "start": "nuxt start",
-    "generate": "nuxt generate"
+    "generate": "nuxt generate",
+    "deploy": "nuxt build && nuxt generate && copyfiles -f ./dist/_nuxt/*.js ./.nuxt/dist/client && gcloud app deploy app.yaml --project attempt2-302520"
   },
   "dependencies": {
     "@nuxtjs/axios": "^5.12.5",
     "core-js": "^3.8.3",
-    "nuxt": "^2.14.12"
+    "nuxt": "^2.14.12",
+    "@nuxtjs/vuetify": "^1.11.3"
   },
   "devDependencies": {
-    "@nuxtjs/vuetify": "^1.11.3"
+    "copyfiles": "^2.4.1"
   }
 }

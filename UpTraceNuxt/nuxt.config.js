@@ -6,8 +6,8 @@ export default {
 
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
-    titleTemplate: '%s - UpTraceNuxt',
-    title: 'UpTraceNuxt',
+    titleTemplate: '%s - attempt2',
+    title: 'attempt2',
     htmlAttrs: {
       lang: 'en'
     },
@@ -27,6 +27,7 @@ export default {
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
+    {src: '~/plugins/Mixins.js'} 
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
@@ -40,12 +41,49 @@ export default {
 
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: [
-    // https://go.nuxtjs.dev/axios
-    '@nuxtjs/axios',
+    [
+      '@nuxtjs/axios',
+      '@nuxtjs/firebase',
+      {
+        config: {
+          apiKey: 'AIzaSyDeG44ayhy1YyMV6rkOU3lsNdbkElPYJks',
+          authDomain: 'attempt2-302520.firebaseapp.com',
+          databaseURL: 'attempt2-302520.firebaseio.com',
+          projectId: 'attempt2-302520',
+          storageBucket: "attempt2-302520.appspot.com",
+          messagingSenderId: "635480116758",
+          appId: "1:635480116758:web:23a113f952699f80882f37",
+          measurementId: "G-HNCPYRMMTP"
+        },
+        services: {
+          auth: true,
+          firestore: true,
+          functions: true,
+          storage: true,
+          database: true,
+          messaging: true,
+          performance: true,
+          analytics: true,
+          remoteConfig: true          
+        }
+      }
+    ]
   ],
 
-  // Axios module configuration: https://go.nuxtjs.dev/config-axios
-  axios: {},
+  auth: {
+
+  },
+
+  firestore: {
+    memoryOnly: false, // default
+    chunkName: process.env.NODE_ENV !== 'production' ? 'firebase-auth' : '[id]', // default
+    enablePersistence: true,
+    emulatorPort: 8080,
+    emulatorHost: 'localhost',
+    settings: {
+      // Firestore Settings - currently only works in SPA mode
+    }
+  },
 
   // Vuetify module configuration: https://go.nuxtjs.dev/config-vuetify
   vuetify: {
@@ -68,5 +106,10 @@ export default {
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
+    extend(config, ctx) {
+      if (ctx.isDev) {
+        config.devtool = ctx.isClient ? 'source-map' : 'inline-source-map'
+      }
+    }
   }
 }
