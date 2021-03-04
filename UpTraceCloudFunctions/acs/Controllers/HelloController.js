@@ -1,7 +1,6 @@
 const { HelloService } = require('./Services/HelloService')
-var service = require('./Services/HelloService')
+var helloService = require('./Services/HelloService')
 
 exports.HelloController =  (req, res) => {
-    service = new HelloService(req.data)
-    res.send(service.data)
+    res.send(helloService.data)
 }

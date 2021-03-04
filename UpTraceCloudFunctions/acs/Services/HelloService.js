@@ -1,12 +1,14 @@
 class HelloService {
-    constructor(data) {
-        this.data = data
+    constructor() {
     }
 
     get data() {
         return this.data
     }
 
+    set data(data) {
+        this.data = data
+    }
 }
 
-module.exports.HelloService = HelloService
+module.exports.HelloService = new HelloService()
