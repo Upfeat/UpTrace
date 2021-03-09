@@ -4,10 +4,9 @@ const jwt = require('jsonwebtoken');
 const validator = require('@authenio/samlify-node-xmllint');
 const saml = require('samlify');
 
-const controller = require('./Controllers/HelloController')
-
 saml.setSchemaValidator(validator);
 
+const helloController = require('./Controllers/HelloController.js')
 
 const PROJECTID = 'attempt2-302520';
 const COLLECTION_NAME = 'Admins';
@@ -105,16 +104,15 @@ function authenticateToken(req) {
 
 exports.acs = async (req, res) => {
   try {
-    await injectSecrects();
-    
     if(authenticateToken(req)) {
       //Case 1: JWT Valid
       console.log("Valid JWT")
-      let functionParam = req.query.function
-      let helloController = new controller.HelloController(functionParam)
-      res.send(helloController.data);
-      
-    } else if(req.body.SAMLResponse){
+ 
+      res.redirect('https://attempt2-302520.ue.r.appspot.com/');
+    } 
+    await injectSecrects();
+
+    if(req.body.SAMLResponse){
       //Case 2: SAML Request
       sp.parseLoginResponse(idp,'post',req).then(async parseResult => {
         const userEmail = parseResult.extract.nameID;
