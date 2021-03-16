@@ -4,9 +4,12 @@ const jwt = require('jsonwebtoken');
 const validator = require('@authenio/samlify-node-xmllint');
 const saml = require('samlify');
 
+const APP_URL = 'http://localhost:3000'
+const SAML_LOGIN_REDIRECT = 'https://accounts.google.com/o/saml2/idp?idpid=C032x590p&SAMLRequest=fZJNj9MwEIb%2FSuS7EyfesBurKeq2WlFpgWpbOHBBxpl0LTl28Ixh%2BfekKfsBEnvwZTzP%2BH2sWaAe3KhWie79HXxPgJQ9DM6jmi9alqJXQaNF5fUAqMio%2Fer9rapyocYYKJjg2AvkdUIjQiQbPMu2m5Z9rXrZNeZSctM1kl%2F0oue6uZC8r2sBtW50KRuWfYaIE9OyacQEIibYeiTtaSqJquRC8lIeKqnEpZJXuXhz9YVlm8nFek0zeU80oioKbUxInjA%2FhnB0kJswFKE4Ba8K241vp2O7di1k9VA3YmTZ7o%2FjtfWd9cfX9b6dm1C9Oxx2fPdxf2DZ6lF5HTymAeIe4g9r4NPd7XOshNyAp6hdyTURDCNVXIqqrkRuXEhdn7w5DcHcA00WyEu2XJxyq%2Fk%2F4vLJ8B88QR5zPY44Bpp1F8VLbHFegA%2BTy3azC86aX9lNiIOm%2F6uWeTlXbMf7uVXBoK1bdV0ExEnZufBzHUETtKzXDoEVy%2FOzf6%2Fa8jc%3D'
+
 saml.setSchemaValidator(validator);
 
-const helloController = require('./Controllers/HelloController.js')
+const helloController = require('./Controllers/HelloController')
 
 const PROJECTID = 'attempt2-302520';
 const COLLECTION_NAME = 'Admins';
@@ -99,47 +102,70 @@ function authenticateToken(req) {
   return valid;
 }
 
+function APIGateway(req, res) {
+  const FUNCTION_NAME = req.query.function;
+  /*
+  switch(FUNCTION_NAME) {
+    case test: helloController(req,res);
+    default: res.send("defaulted")
+  }*/
+
+  return FUNCTION_NAME;
+}
+
+function toJSON(string) {
+  return {
+          "value": string,
+          "valid": true
+         }
+}
 
 
-
-exports.acs = async (req, res) => {
+exports.acs1 = async (req, res) => {
   try {
+
+    const corsWhitelist = [
+      APP_URL,
+      SAML_LOGIN_REDIRECT
+    ]
+    if(corsWhitelist.indexOf(req.headers.origin) !== -1) {
+
+    }
+    res.set('Access-Control-Allow-Origin', req.headers.origin);
+    res.set('Access-Control-Allow-Credentials', 'true');
+    console.log(res.get('Content-Type'))
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+
+
     if(authenticateToken(req)) {
       //Case 1: JWT Valid
-      console.log("Valid JWT")
- 
-      res.redirect('https://attempt2-302520.ue.r.appspot.com/');
+      console.log("This should not be appearing")
+      res.send(toJSON(APIGateway(req,res)));
     } 
-    await injectSecrects();
-
-    if(req.body.SAMLResponse){
-      //Case 2: SAML Request
-      sp.parseLoginResponse(idp,'post',req).then(async parseResult => {
-        const userEmail = parseResult.extract.nameID;
-        var adminAccount = await getAdminAccount(userEmail);
-        if(req.body.SAMLResponse) {
-          console.log(JSON.stringify(req.body))
+    else { 
+      await injectSecrects();
+      if(req.body.SAMLResponse){
+        //Case 2: SAML Request
+        sp.parseLoginResponse(idp,'post',req).then(async parseResult => {
+          const userEmail = parseResult.extract.nameID;
+          var adminAccount = await getAdminAccount(userEmail);
+          if (!adminAccount) {
+            createAdminAccount(userEmail);
+            adminAccount = await getAdminAccount(userEmail);
+          }
+          const accessToken = jwt.sign({email: adminAccount.email, role: adminAccount.role}, aToken);
+          return accessToken;
+        }).then((accessToken)=>{
+          res.cookie('JWT', accessToken,{sameSite: 'None', secure: true, httpOnly: true});
+          res.redirect(APP_URL);
+        })
+      } else {
+          //Case 3: redirect to login
+          let uri = sp.createLoginRequest(idp).context;
+          //res.set('Access-Control-Allow-Methods', 'GET, POST', 'HEAD')
+          res.send(uri);
         }
-        if (!adminAccount) {
-          createAdminAccount(userEmail);
-          adminAccount = await getAdminAccount(userEmail);
-        }
-        const accessToken = jwt.sign({email: adminAccount.email, role: adminAccount.role}, aToken);
-        return accessToken;
-      }).then((accessToken)=>{
-        
-        res.header('Access-Control-Allow-Origin', req.headers.origin);
-        res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-        res.cookie('JWT', accessToken,{httpOnly: false});
-        res.redirect('https://attempt2-302520.ue.r.appspot.com/');
-      })
-    } else {
-        //Case 3: redirect to login
-        let uri = sp.createLoginRequest(idp).context;
-        res.set('Access-Control-Allow-Origin', "*")
-        res.set('Access-Control-Allow-Methods', 'GET, POST', 'HEAD')
-        res.send(uri);
-    }
+      }
   } catch(error) {
     console.log(error)
     res.send(error)

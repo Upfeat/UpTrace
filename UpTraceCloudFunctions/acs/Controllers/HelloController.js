@@ -1,5 +1,5 @@
-var helloService = require('./Services/HelloService.js')
+var helloService = require('../Services/HelloService')
 
-exports.HelloController =  (req, res) => {
-    res.send("Hello Controllers")
+module.exports = (req, res) => {
+    res.send(helloService.data)
 }

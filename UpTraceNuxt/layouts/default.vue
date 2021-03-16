@@ -3,6 +3,7 @@
     <v-card class="app-bar">
       <v-app-bar>
         <v-btn text @click="samlTest()">SAML</v-btn>
+        <v-btn text @click="samlAuthenticate()">AUTH</v-btn>
       </v-app-bar>
     </v-card>
     <v-main>
@@ -15,10 +16,15 @@
 export default {
  methods: {
     async samlTest() {
-      const res = await this.invokeCloudFunction('get','https://us-central1-attempt2-302520.cloudfunctions.net/acs-1')
+      const res = await this.invokeCloudFunction('GET','https://us-central1-attempt2-302520.cloudfunctions.net/acs-1')
       const url = res.data;
       window.location.replace(url)
+    },
+    
+    async samlAuthenticate() {
+      await this.SAMLAuthenticate('GET','test')
     }
+    
   }
 }
 </script>

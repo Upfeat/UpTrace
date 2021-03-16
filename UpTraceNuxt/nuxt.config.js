@@ -71,7 +71,12 @@ export default {
   ],
 
   auth: {
-
+    redirect: {
+      login: '/login',
+      logout: '/',
+      callback: '/login',
+      home: '/'
+    }
   },
 
   firestore: {

@@ -8,7 +8,8 @@ if (!Vue.invokeCloudFunction) {
                 try {
                     let data = await this.$axios({
                         method: method,
-                        url: url
+                        url: url,
+                        withCredentials: true
                     })
                     return data;
                 } catch(error) {
@@ -25,18 +26,35 @@ if(!Vue.SAMLAuthenticate) {
         methods: {
             async SAMLAuthenticate(httpMethod,functionName) {
                 try {
-                    let returnVal = await this.$axios({
+                    let value = await this.$axios({
                         method: httpMethod,
-                        url: `https://us-central1-attempt2-302520.cloudfunctions.net/acs-1?function=${functionName}`
+                        url: `https://us-central1-attempt2-302520.cloudfunctions.net/acs-1?function=${functionName}`,
+                        withCredentials: true
                     })
-                    value = returnVal.data;
-
-                    if(typeof JSON.parse(value)==='object') return JSON.parse(value)
                     
-                    var url = new URL(value)
-                    if(url.protocol === 'http:' || url.protocol === 'https:') window.location.replace(returnVal.data)
+                    let output;
+                    try {
+                        output = JSON.parse(value.data)
+                    } catch(error){
+                        output = value.data
+                    }
+
+                    if(typeof output==='object') {
+                        //console.log("-----FROM MIXIN-----") 
+                        if(output.valid) {
+                            console.log("VALID JWT")
+                        }
+                        //console.log(output.value)
+                        //console.log(output.valid)
+                        return output 
+                    } 
+                    else {
+                        console.log("REDIRECTING")
+                        window.location.replace(output)
+                    }
 
                 } catch(error) {
+                    console.log(error + " + " + error.response )
                     return error.response;
                 }
             }

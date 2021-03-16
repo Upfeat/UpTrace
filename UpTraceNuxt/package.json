@@ -7,7 +7,7 @@
     "build": "nuxt build",
     "start": "nuxt start",
     "generate": "nuxt generate",
-    "deploy": "nuxt build && nuxt generate && copyfiles -f ./dist/_nuxt/*.js ./.nuxt/dist/client && gcloud app deploy app.yaml --project attempt2-302520"
+    "deploy": "nuxt generate && copyfiles app.yaml dist/ && echo y | gcloud app deploy --project attempt2-302520 dist"
   },
   "dependencies": {
     "@nuxtjs/axios": "^5.12.5",
