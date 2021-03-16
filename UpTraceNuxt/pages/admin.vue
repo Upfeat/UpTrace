@@ -13,7 +13,6 @@
 </template>
 
 <script>
-import People from '../components/People'
 export default {
     
     data() {
@@ -21,8 +20,6 @@ export default {
             adminLoggedIn: false,
             propData: 'not loaded'
             //    <People v-bind:display="propData" />
-
-
         }
     },
 
