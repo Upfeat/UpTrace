@@ -9,8 +9,6 @@ const SAML_LOGIN_REDIRECT = 'https://accounts.google.com/o/saml2/idp?idpid=C032x
 
 saml.setSchemaValidator(validator);
 
-const helloController = require('./Controllers/HelloController')
-
 const PROJECTID = 'attempt2-302520';
 const COLLECTION_NAME = 'Admins';
 
@@ -86,7 +84,6 @@ var getCookies = function(req) {
   return cookies;
 };
 
-
 function authenticateToken(req) {
   var valid = false;
   
@@ -103,14 +100,19 @@ function authenticateToken(req) {
 }
 
 function APIGateway(req, res) {
-  const FUNCTION_NAME = req.query.function;
-  /*
-  switch(FUNCTION_NAME) {
-    case test: helloController(req,res);
-    default: res.send("defaulted")
-  }*/
 
-  return FUNCTION_NAME;
+  const controllerRouter = {
+    people() { return require('./Controllers/PeopleController')},
+    places() { return require('./Controllers/PeopleController')},
+  }
+
+  var actionStr = req.body.action;
+  var instructions = actionStr.split('/');
+  var controllerName = instructions[0];
+  var methodName = instructions[1];
+  const controller = (controllerRouter[controllerName])();
+  
+  return controller[methodName]()
 }
 
 function toJSON(string) {
@@ -119,7 +121,6 @@ function toJSON(string) {
           "valid": true
          }
 }
-
 
 exports.acs1 = async (req, res) => {
   try {
@@ -133,13 +134,10 @@ exports.acs1 = async (req, res) => {
     }
     res.set('Access-Control-Allow-Origin', req.headers.origin);
     res.set('Access-Control-Allow-Credentials', 'true');
-    console.log(res.get('Content-Type'))
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-
 
     if(authenticateToken(req)) {
       //Case 1: JWT Valid
-      console.log("This should not be appearing")
       res.send(toJSON(APIGateway(req,res)));
     } 
     else { 
@@ -157,7 +155,7 @@ exports.acs1 = async (req, res) => {
           return accessToken;
         }).then((accessToken)=>{
           res.cookie('JWT', accessToken,{sameSite: 'None', secure: true, httpOnly: true});
-          res.redirect(APP_URL);
+          res.redirect(APP_URL + "/admin/people");
         })
       } else {
           //Case 3: redirect to login

@@ -1,24 +1,43 @@
 <template>
-    <v-container>
-        <v-card-title
-          elevation="1"
-          shaped
-        >
-        People
-        </v-card-title>
-
-        <h1 v-bind:display="display">{{display}}</h1>
+    <v-container >
+        <PeopleForm />
+        <PeopleTable :people-data="peopleData"/>
     </v-container>
+
+
 </template>
 
 <script>
+import PeopleTable from '../../components/PeopleTable.vue'
 export default {
-    layout: 'adminOverlay',
+  components: { PeopleTable },
+    layout: 'adminnav',
 
-    props:[
-        'display'
-    ]
+    props:{
+        tableData: Object
+    },
+
+    data() {
+        return {
+            peopleData:{
+                people:[
+                    {
+                        firstName: 'Josh',
+                        lastName: 'Daigle',
+                        address: '54 st edmunds bay',
+                        phoneNumber: '204-960-8617',
+                        emailAddress: 'joshwdaigle@gmail.com'
+                    }
+
+                    ]
+
+                }
+        }
+    },
+
+    
 }
+
 </script>
 
 <style>

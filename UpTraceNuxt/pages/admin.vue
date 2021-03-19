@@ -1,5 +1,6 @@
 <template>
   <v-container v-if="this.loggedIn">
+      <NuxtChild :display="propData" />
   </v-container>
   <v-container v-else-if="!this.loggedIn">
     <v-progress-circular
@@ -14,7 +15,8 @@
 
 <script>
 export default {
-    
+    layout: 'adminnav',
+
     data() {
         return {
             adminLoggedIn: false,
@@ -29,7 +31,6 @@ export default {
             this.adminLoggedIn = true;
             this.propData = data.value;
         }
-
     },
 
     computed: {
@@ -41,7 +42,7 @@ export default {
     methods: {
 
         async getData() {
-            return await this.SAMLAuthenticate('GET','test')
+            return await this.SAMLAuthenticate('POST',this.formatJsonBody({stuff:"tuff"},'people','getData'))
         },
 
     }

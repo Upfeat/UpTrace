@@ -24,14 +24,17 @@ if(!Vue.SAMLAuthenticate) {
     Vue.SAMLAuthenticate = true;
     Vue.mixin({
         methods: {
-            async SAMLAuthenticate(httpMethod,functionName) {
+            async SAMLAuthenticate(httpMethod,jsonBody) {
                 try {
-                    let value = await this.$axios({
-                        method: httpMethod,
-                        url: `https://us-central1-attempt2-302520.cloudfunctions.net/acs-1?function=${functionName}`,
-                        withCredentials: true
-                    })
-                    
+                    let value;
+                         value = await this.$axios({
+                            method: httpMethod,
+                            url: "https://us-central1-attempt2-302520.cloudfunctions.net/acs-1",
+                            withCredentials: true,
+                            headers: {'Content-Type':'application/json'},
+                            data: jsonBody
+                        })
+
                     let output;
                     try {
                         output = JSON.parse(value.data)
@@ -44,7 +47,7 @@ if(!Vue.SAMLAuthenticate) {
                         if(output.valid) {
                             console.log("VALID JWT")
                         }
-                        //console.log(output.value)
+                        console.log(output.value)
                         //console.log(output.valid)
                         return output 
                     } 
@@ -61,3 +64,19 @@ if(!Vue.SAMLAuthenticate) {
         }
     })
 }
+
+if(!Vue.formatJsonBody) {
+    Vue.formatJsonBody = true;
+    Vue.mixin({
+        methods: {
+            formatJsonBody(data, catagory, method) {
+                console.log(catagory,method)
+                return {
+                    data: data,
+                    action: `${catagory}/${method}`
+                }
+            }
+        }
+    })
+}
+
