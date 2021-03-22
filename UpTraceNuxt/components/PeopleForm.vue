@@ -107,7 +107,7 @@
             </v-btn>                    
         </v-container>
     </v-form>
-    </v-card>
+</v-card>
 
 </template>
 
@@ -140,7 +140,13 @@ export default {
                 phoneNumber: this.phoneNumber,
                 emailAddress: this.emailAddress 
             }
-            await this.SAMLAuthenticate('POST',this.formatJsonBody(person,'people','addPerson'))
+            debugger;
+
+            var valid = await this.SAMLAuthenticate('POST',this.formatJsonBody(person,'people','addPerson'))
+            debugger;
+            console.log(valid.valid)
+            debugger
+            
         }
     }
     

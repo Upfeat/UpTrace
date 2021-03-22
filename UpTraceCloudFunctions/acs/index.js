@@ -103,16 +103,18 @@ function APIGateway(req, res) {
 
   const controllerRouter = {
     people() { return require('./Controllers/PeopleController')},
-    places() { return require('./Controllers/PeopleController')},
+    places() { return require('./Controllers/PeopleController')}
   }
 
   var actionStr = req.body.action;
   var instructions = actionStr.split('/');
   var controllerName = instructions[0];
   var methodName = instructions[1];
+  console.log('INDEX: Person='+JSON.stringify(req.body.data))
+
   const controller = (controllerRouter[controllerName])();
   
-  return controller[methodName]()
+  return ((controller[methodName])(req.body.data))
 }
 
 function toJSON(string) {

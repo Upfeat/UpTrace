@@ -1,5 +1,5 @@
 const encryptionService = require('./EncryptionService')
-//const repository = require('../Repositories/PersonRepository')
+const repository = require('../Repositories/PersonRepository')
 
 class People {
 
@@ -8,6 +8,8 @@ class People {
     }
 
     addPerson(person) {
+        console.log('SERVICE/PEOPLE: Person='+JSON.stringify(person))
+
         const encryptedPerson = {
             firstName: encryptionService.encrypt(person.firstName),
             lastName: encryptionService.encrypt(person.lastName),
@@ -21,7 +23,7 @@ class People {
         }
 
         console.log(JSON.stringify(encryptedPerson))
-        //repository.create(encryptedPerson);
+        repository.create(encryptedPerson);
     }
 }
 

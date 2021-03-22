@@ -26,15 +26,13 @@ export default {
     },
 
     async created() {
-        var data = await this.getData();
-        if(data.valid) {
-            this.adminLoggedIn = true;
-            this.propData = data.value;
-        }
     },
 
     computed: {
-        loggedIn() {
+        async loggedIn() {
+            var data = await this.getData();
+            this.adminLoggedIn = data.valid
+
             return this.adminLoggedIn;
         }
     },
@@ -43,7 +41,7 @@ export default {
 
         async getData() {
             return await this.SAMLAuthenticate('POST',this.formatJsonBody({stuff:"tuff"},'people','getData'))
-        },
+        }
 
     }
 

@@ -10,6 +10,7 @@ class PeopleController {
     }
 
     addPerson(person) {
+        console.log('CONTROLLER/PEOPLE: Person='+JSON.stringify(person))
         peopleService.addPerson(person)
     }
 
