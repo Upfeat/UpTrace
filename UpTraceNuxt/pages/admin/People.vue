@@ -14,7 +14,7 @@ export default {
     layout: 'adminnav',
 
     props:{
-        tableData: Object
+        //tableData: Object
     },
 
     data() {

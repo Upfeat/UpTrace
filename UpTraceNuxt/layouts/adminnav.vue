@@ -9,7 +9,6 @@
     >
 
       <v-list-item-title class="title">
-        <UpfeatLogo />
         UpTrace
       </v-list-item-title>
 
@@ -72,7 +71,6 @@ export default {
       right: true,
       rightDrawer: false,
       title: 'UpTrace',
-      UpfeatLogo: '/static/upfeat-logo.svg'
     }
   }
 }

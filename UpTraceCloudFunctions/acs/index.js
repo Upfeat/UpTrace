@@ -110,7 +110,7 @@ function APIGateway(req, res) {
   var instructions = actionStr.split('/');
   var controllerName = instructions[0];
   var methodName = instructions[1];
-  console.log('INDEX: Person='+JSON.stringify(req.body.data))
+  console.log('INDEX: Data='+JSON.stringify(req.body.data))
 
   const controller = (controllerRouter[controllerName])();
   

@@ -19,21 +19,20 @@ export default {
 
     data() {
         return {
-            adminLoggedIn: false,
-            propData: 'not loaded'
-            //    <People v-bind:display="propData" />
+            propData: 'not loaded',
+            adminLoggedIn: false
         }
-    },
-
-    async created() {
     },
 
     computed: {
         async loggedIn() {
-            var data = await this.getData();
-            this.adminLoggedIn = data.valid
-
-            return this.adminLoggedIn;
+            console.log("called")
+            if(!this.adminLoggedIn) {
+                let valid = await (this.getData()).valid
+                this.adminLoggedIn = valid
+                return valid
+            }
+            return 
         }
     },
 

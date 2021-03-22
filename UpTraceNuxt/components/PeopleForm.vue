@@ -2,9 +2,9 @@
     <v-card>
     <v-form>
         <v-container>
-            <v-title class="title">
+            <v-card-subtitle class="title">
                 Personal
-            </v-title>
+            </v-card-subtitle>
             <v-row>
                 <v-col
                     cols="12"
@@ -25,9 +25,9 @@
                     </v-text-field>
                 </v-col>
             </v-row>
-            <v-title>
+            <v-card-subtitle class="title">
                 Address
-            </v-title>
+            </v-card-subtitle>
             <v-row>
                 <v-col
                     cols="12"
@@ -79,9 +79,9 @@
                     </v-text-field>
                 </v-col>
             </v-row>
-            <v-title>
+            <v-card-subtitle class="title">
                 Contact
-            </v-title>
+            </v-card-subtitle>
             <v-row>
                 <v-col
                     cols="12"
@@ -140,13 +140,7 @@ export default {
                 phoneNumber: this.phoneNumber,
                 emailAddress: this.emailAddress 
             }
-            debugger;
-
-            var valid = await this.SAMLAuthenticate('POST',this.formatJsonBody(person,'people','addPerson'))
-            debugger;
-            console.log(valid.valid)
-            debugger
-            
+            var valid = await this.SAMLAuthenticate('POST',this.formatJsonBody(person,'people','addPerson'))            
         }
     }
     
