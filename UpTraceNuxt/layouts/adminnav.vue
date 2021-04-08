@@ -1,17 +1,15 @@
 <template>
-  <v-app dark>
+  <v-app>
     <v-navigation-drawer
       v-model="drawer"
       :mini-variant="miniVariant"
       :clipped="clipped"
       fixed
       app
+      color="bluegray"
+      dark
     >
-
-      <v-list-item-title class="title">
-        UpTrace
-      </v-list-item-title>
-
+    <upfeat-logo />
       <v-list>
         <v-list-item
           v-for="(item, i) in items"
@@ -21,7 +19,7 @@
           exact
         >
           <v-list-item-action>
-            <v-icon>{{ item.icon }}</v-icon>
+            <v-icon color="teal">{{ item.icon }}</v-icon>
           </v-list-item-action>
           <v-list-item-content>
             <v-list-item-title v-text="item.title" />
@@ -29,14 +27,6 @@
         </v-list-item>
       </v-list>
     </v-navigation-drawer>
-    <v-app-bar
-      :clipped-left="clipped"
-      fixed
-      app
-    >
-      <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
-      <v-toolbar-title v-text="title" />
-    </v-app-bar>
     <v-main>
       <v-container>
         <nuxt />
@@ -49,29 +39,39 @@
 </template>
 
 <script>
+import upfeatLogo from '../components/upfeat-logo.vue'
 export default {
+  components: { upfeatLogo },
   data () {
     return {
       clipped: false,
-      drawer: false,
+      drawer: true,
       fixed: false,
       items: [
         {
-          icon: 'mdi-apps',
+          icon: 'mdi-account-circle',
           title: 'People',
           to: '/admin/people'
         },
         {
-          icon: 'mdi-chart-bubble',
+          icon: 'mdi-map',
           title: 'Places',
           to: '/admin/places'
+        },
+        {
+          icon: 'mdi-train-variant',
+          title: 'Transportation',
+          to: '/admin/transportation'
         }
       ],
       miniVariant: false,
       right: true,
       rightDrawer: false,
-      title: 'UpTrace',
     }
   }
 }
 </script>
+
+<style>
+
+</style>

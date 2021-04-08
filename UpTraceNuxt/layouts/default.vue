@@ -1,8 +1,8 @@
 <template>
-  <v-app dark>
+  <v-app>
     <v-card class="app-bar">
       <v-app-bar>
-        <v-btn text @click="samlAuthenticate()">AUTH</v-btn>
+        <v-btn text @click="goToAdmin()">ADMIN</v-btn>
       </v-app-bar>
     </v-card>
     <v-main>
@@ -14,8 +14,8 @@
 <script>
 export default {
  methods: {
-    async samlAuthenticate() {
-      await this.SAMLAuthenticate('POST',this.formatJsonBody({stuff:"tuff"},'people','getData'))
+    goToAdmin() {
+      this.$router.push("admin/people")
     }
     
   }

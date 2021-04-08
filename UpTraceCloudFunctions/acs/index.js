@@ -4,12 +4,12 @@ const jwt = require('jsonwebtoken');
 const validator = require('@authenio/samlify-node-xmllint');
 const saml = require('samlify');
 
-const APP_URL = 'http://localhost:3000'
+const APP_URL = 'https://uptraceuofm.uc.r.appspot.com'
 const SAML_LOGIN_REDIRECT = 'https://accounts.google.com/o/saml2/idp?idpid=C032x590p&SAMLRequest=fZJNj9MwEIb%2FSuS7EyfesBurKeq2WlFpgWpbOHBBxpl0LTl28Ixh%2BfekKfsBEnvwZTzP%2BH2sWaAe3KhWie79HXxPgJQ9DM6jmi9alqJXQaNF5fUAqMio%2Fer9rapyocYYKJjg2AvkdUIjQiQbPMu2m5Z9rXrZNeZSctM1kl%2F0oue6uZC8r2sBtW50KRuWfYaIE9OyacQEIibYeiTtaSqJquRC8lIeKqnEpZJXuXhz9YVlm8nFek0zeU80oioKbUxInjA%2FhnB0kJswFKE4Ba8K241vp2O7di1k9VA3YmTZ7o%2FjtfWd9cfX9b6dm1C9Oxx2fPdxf2DZ6lF5HTymAeIe4g9r4NPd7XOshNyAp6hdyTURDCNVXIqqrkRuXEhdn7w5DcHcA00WyEu2XJxyq%2Fk%2F4vLJ8B88QR5zPY44Bpp1F8VLbHFegA%2BTy3azC86aX9lNiIOm%2F6uWeTlXbMf7uVXBoK1bdV0ExEnZufBzHUETtKzXDoEVy%2FOzf6%2Fa8jc%3D'
 
 saml.setSchemaValidator(validator);
 
-const PROJECTID = 'attempt2-302520';
+const PROJECTID = 'uptraceuofm';
 const COLLECTION_NAME = 'Admins';
 
 const SP_SECRET = 'SecretSP';
@@ -20,6 +20,7 @@ var sp;
 var idp;
 var aToken;
 var rToken;
+var logList = [];
 
 
 const firestore = new Firestore({
@@ -30,7 +31,7 @@ const firestore = new Firestore({
 const client = new SecretManagerServiceClient();
 
 function getSecretPath(secretName) {
-  return `projects/attempt2-302520/secrets/${secretName}/versions/latest`;
+  return `projects/uptraceuofm/secrets/${secretName}/versions/latest`;
 }
 
 async function accessSecretVersion(secretPath) {
@@ -99,32 +100,47 @@ function authenticateToken(req) {
   return valid;
 }
 
-function APIGateway(req, res) {
+async function APIGateway(req, res) {
+
+  var returnValue;
 
   const controllerRouter = {
     people() { return require('./Controllers/PeopleController')},
-    places() { return require('./Controllers/PeopleController')}
+    places() { return require('./Controllers/PlacesController')}
   }
 
   var actionStr = req.body.action;
   var instructions = actionStr.split('/');
   var controllerName = instructions[0];
   var methodName = instructions[1];
-  console.log('INDEX: Data='+JSON.stringify(req.body.data))
 
   const controller = (controllerRouter[controllerName])();
-  
-  return ((controller[methodName])(req.body.data))
+  var controllerReturn;
+
+  if(req.body.data) 
+    controllerReturn = (controller[methodName])(req.body.data)
+  else 
+    controllerReturn = (controller[methodName])()
+
+  if(controllerReturn instanceof Promise) {
+    returnValue = await controllerReturn
+  }
+  else 
+    returnValue = controllerReturn
+    
+  console.log(returnValue)
+
+  return returnValue
 }
 
-function toJSON(string) {
-  return {
-          "value": string,
+function toJSON(value) {
+  return JSON.stringify({
+          "value": value,
           "valid": true
-         }
+         })
 }
 
-exports.acs1 = async (req, res) => {
+exports.acs = async (req, res) => {
   try {
 
     const corsWhitelist = [
@@ -140,7 +156,7 @@ exports.acs1 = async (req, res) => {
 
     if(authenticateToken(req)) {
       //Case 1: JWT Valid
-      res.send(toJSON(APIGateway(req,res)));
+      res.send(toJSON(await APIGateway(req,res)));
     } 
     else { 
       await injectSecrects();

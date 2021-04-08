@@ -1,15 +1,18 @@
 import Vue from 'vue';
 
-if (!Vue.invokeCloudFunction) {
-    Vue.invokeCloudFunction = true
+if (!Vue.callAPI) {
+    Vue.callAPI = true
     Vue.mixin({
         methods : {
-            async invokeCloudFunction(method, url) {
+            async callAPI(method, url) {
                 try {
                     let data = await this.$axios({
                         method: method,
                         url: url,
-                        withCredentials: true
+                        headers: {
+                            "Access-Control-Allow-Origin": '*',
+                            "Access-Control-Allow-Methods": 'GET'
+                        }
                     })
                     return data;
                 } catch(error) {
@@ -26,39 +29,32 @@ if(!Vue.SAMLAuthenticate) {
         methods: {
             async SAMLAuthenticate(httpMethod,jsonBody) {
                 try {
-                    let value;
-                    value = await this.$axios({
+                    let axiosReturn;
+                    axiosReturn = await this.$axios({
                         method: httpMethod,
-                        url: "https://us-central1-attempt2-302520.cloudfunctions.net/acs-1",
+                        url: "https://us-central1-uptraceuofm.cloudfunctions.net/acs",
                         withCredentials: true,
-                        headers: {'Content-Type':'application/json'},
                         data: jsonBody
                     })
 
                     let output;
-                    
+
                     try {
-                        output = JSON.parse(value.data)
-                        console.log("output: " + output)
-                        debugger;
-
-
+                        output = axiosReturn.data
+                        output.value = JSON.parse(output.value)
+                        console.log("OUTPUT VALUE = "+JSON.stringify(output))
                     } catch(error){
-                        output = value.data
+                        console.log("ERR VALUE = "+JSON.stringify(error))
                     }
                     if(typeof output !== undefined) {
                         if(typeof output==='object') {
-                            //console.log("-----FROM MIXIN-----") 
                             if(output.valid) {
                                 console.log("VALID JWT")
                             }
-                            console.log(output.value)
-                            //console.log(output.valid)
+                            console.log("OUTPUT = "+ JSON.stringify(output))
                             return output 
                         } 
                         else {
-                            //console.log("REDIRECTINGGGG")
-                            //console.log("OUTPUT:" + output)
                             window.location.replace(output)
                         }
                     }
@@ -76,7 +72,6 @@ if(!Vue.formatJsonBody) {
     Vue.formatJsonBody = true;
     Vue.mixin({
         methods: {
-
             formatJsonBody(data, catagory, method) {
                 console.log(catagory,method)
                 return {

@@ -8,9 +8,10 @@
     </v-spacer>
   <v-data-table
     :headers="headers"
-    :items="peopleData.people"
+    :items="peopleData"
     :items-per-page="5"
     class="elevation-1"
+    @click:row="handleClick"
   >
   </v-data-table>
 </v-card>
@@ -19,7 +20,7 @@
 <script>
 export default {
     props: {
-        peopleData: Object
+        peopleData: Array
     },
     
     computed: {
@@ -30,9 +31,13 @@ export default {
                 {text: 'Address', value: 'address'},
                 {text: 'Phone Number', value: 'phoneNumber'},
                 {text: 'Email Address', value: 'emailAddress'}
-
             ]
         }
+    },
+    methods: {
+        handleClick(person) {
+            this.$router.push({ path: `editperson/${person.uuid}` })
+        },
     }
 }
 </script>

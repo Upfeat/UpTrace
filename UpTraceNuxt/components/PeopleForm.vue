@@ -11,8 +11,11 @@
                     md="4"
                     >
                     <v-text-field
-                        v-model="firstName"
-                        label="First Name">
+                        v-model="items.firstName"
+                        label="First Name"
+                        @input="onInput()"
+                        >
+                        
                     </v-text-field>
                 </v-col>
                 <v-col
@@ -20,7 +23,7 @@
                     md="4"
                 >
                     <v-text-field
-                        v-model="lastName"
+                        v-model="items.lastName"
                         label="Last Name">
                     </v-text-field>
                 </v-col>
@@ -34,7 +37,7 @@
                     md="4"
                 >
                     <v-text-field
-                        v-model="address"
+                        v-model="items.address"
                         label="Address Line 1">
                     </v-text-field>
                 </v-col>
@@ -43,7 +46,7 @@
                     md="4"
                 >
                     <v-text-field
-                        v-model="address2"
+                        v-model="items.address2"
                         label="Address Line 2">
                     </v-text-field>
                 </v-col>
@@ -54,7 +57,7 @@
                     md="4"
                 >
                     <v-text-field
-                        v-model="city"
+                        v-model="items.city"
                         label="City">
                     </v-text-field>
                 </v-col>
@@ -63,7 +66,7 @@
                     md="4"
                 >
                     <v-text-field
-                        v-model="provinceOrTerritory"
+                        v-model="items.provinceOrTerritory"
                         label="Province/Territory">
                     </v-text-field>
                 </v-col>
@@ -74,7 +77,7 @@
                     md="4"
                 >
                     <v-text-field
-                        v-model="postalCode"
+                        v-model="items.postalCode"
                         label="Postal Code">
                     </v-text-field>
                 </v-col>
@@ -88,7 +91,7 @@
                     md="4"
                 >
                     <v-text-field
-                        v-model="phoneNumber"
+                        v-model="items.phoneNumber"
                         label="Phone Number">
                     </v-text-field>
                 </v-col>
@@ -97,14 +100,11 @@
                     md="4"
                 >
                     <v-text-field
-                        v-model="emailAddress"
+                        v-model="items.emailAddress"
                         label="Email Address">
                     </v-text-field>
                 </v-col>
             </v-row>
-            <v-btn type="text" @click="submit()">
-                Submit
-            </v-btn>                    
         </v-container>
     </v-form>
 </v-card>
@@ -113,42 +113,34 @@
 
 <script>
 export default {
+
+    props: {
+        value: Object
+    },
+
     data() {
-        return{
-            firstName: '',
-            lastName: '',
-            address: '',
-            address2: '',
-            city: '',
-            provinceOrTerritory: '',
-            postalCode: '',
-            phoneNumber: '',
-            emailAddress: ''
+        return {
+            items: "not loaded"
         }
     },
-    
+
+    created() {
+        this.items = this.value
+    },
+
     methods: {
-        async submit() {
-            let person = {
-                firstName: this.firstName,
-                lastName: this.lastName,
-                address: this.address,
-                address2: this.address2,
-                city: this.city,
-                provinceOrTerritory: this.provinceOrTerritory,
-                postalCode: this.postalCode,
-                phoneNumber: this.phoneNumber,
-                emailAddress: this.emailAddress 
-            }
-            var valid = await this.SAMLAuthenticate('POST',this.formatJsonBody(person,'people','addPerson'))            
+        onInput() {
+            console.log("registered")
+            this.$emit("update-data", this.items);
         }
-    }
-    
+   }
+
 }
 </script>
 
 <style>
 .title {
-    border-bottom: solid
+    border-bottom: solid 2px lightgray;
+    padding-bottom:10px;
 }
 </style>

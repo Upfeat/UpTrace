@@ -1,10 +1,13 @@
 <template>
-    <v-container >
-        <PeopleForm />
-        <PeopleTable :people-data="peopleData"/>
+    <v-container>
+        <AdminPageTitle :title="title"/>
+        <v-card>
+            <v-flex class="text-right">
+                <v-btn type="button" color="lightblue" class="white--text" @click="toAddMember()">+ Add Member</v-btn>
+            </v-flex>
+            <PeopleTable :people-data="peopleData"/>
+        </v-card>        
     </v-container>
-
-
 </template>
 
 <script>
@@ -14,28 +17,34 @@ export default {
     layout: 'adminnav',
 
     props:{
-        //tableData: Object
+        peopleData: Array
+    },
+
+    created() {
+        console.log(this.displayData)
+    },
+
+    computed: {
+        displayData() {
+            return JSON.stringify(this.peopleData)
+        }
     },
 
     data() {
         return {
-            peopleData:{
-                people:[
-                    {
-                        firstName: 'Josh',
-                        lastName: 'Daigle',
-                        address: '54 st edmunds bay',
-                        phoneNumber: '204-960-8617',
-                        emailAddress: 'joshwdaigle@gmail.com'
-                    }
-
-                    ]
-
-                }
+            title: "People",
         }
     },
 
-    
+    methods: {
+        toAddMember() {
+            this.$router.push("/admin/addperson")
+        },
+
+        PRINT() {
+            console.log(JSON.stringify(this.peopleData))
+        }
+    }
 }
 
 </script>
