@@ -69,31 +69,60 @@ export default {
     },
 
     setBounds(map) {
-
-
-      const coordinates = map.getBounds().toJSON(); //.toJSON();
-      console.log(coordinates)
-      
+      const coordinates = map.getBounds().toJSON(); //.toJSON();      
       this.locationBias = {north:coordinates.north, south:coordinates.south, east:coordinates.east, west:coordinates.west}
     },
 
 
-    buildRequest() {
+    buildTextSearchRequest(queryText) {      
       return {
-        query: this.query,
-        fields: this.fields,
-        locationBias: this.locationBias,
+        query: queryText,
+        fields: ["name", "formatted_address", "geometry", "place_id"],
+        bounds: this.locationBias,
       };
+    },
+
+    buildPlaceDetailsRequest(queryText) {
+      return {
+        placeId: queryText,
+        fields: ["name", "formatted_address", "formatted_phone_number", "geometry", "place_id"],
+      };
+    },
+
+    searchByID(place_id) {
+      console.log("REACHED FINAL FUNCTION: place_id=" + place_id)
+      if(place_id === null) return
+      const _this = this
+      this.clearMapResults()
+
+      if (this.placesService) {
+        this.placesService.getDetails(
+          this.buildPlaceDetailsRequest(place_id),
+          function (results, status) {
+            if (status === google.maps.places.PlacesServiceStatus.OK) {
+              _this.createMarker(results)
+              _this.gMap.setCenter(results.geometry.location)
+              _this.gMap.setZoom(18)
+              _this.$emit("selected-place-details", _this.formatPlaceResults(results))
+            } else {
+              console.log("status: " + status);
+            }
+          }
+        );
+      } else {
+        console.log("Places Service not initialized");
+      }
     },
 
     submitRequest() {
       const _this = this;
+      console.log("REACHED SUBMIT REQUEST: query=" + this.query)
 
       this.clearMapResults()
 
       if (this.placesService) {
-        this.placesService.findPlaceFromQuery(
-          this.buildRequest(),
+        this.placesService.textSearch(
+          this.buildTextSearchRequest(this.query),
           function (results, status) {
             if (status === google.maps.places.PlacesServiceStatus.OK) {
               for (var i = 0; i < results.length; i++) {
@@ -112,8 +141,8 @@ export default {
     },
 
     addToAutoComplete(place) {
-        const listItem = {name: place.name, address: place.formatted_address, id: place.place_id}
-        //console.log("ITEM ADDED: "+JSON.stringify(listItem))
+        console.log("adding: " + place.name + " to the list")
+        const listItem = {name: place.name, address: place.formatted_address, place_id: place.place_id}
         this.autoCompleteList.push(listItem)
         this.$emit("update-auto-complete",this.autoCompleteList)
     },
@@ -126,6 +155,39 @@ export default {
       }
       this.markers.length=0
     },
+
+    formatPlaceResults(results) {
+      return {name: results.name, 
+              address: results.formatted_address, 
+              phoneNumber: results.formatted_phone_number, 
+              city: results.formatted_address.split(',')[1].substring(1),
+              provinceOrTerritory: this.abrevToFull(results.formatted_address.split(',')[2].substring(1,2)),
+              postalCode: results.formatted_address.split(',')[2].substring(4),
+              placeID: results.place_id,
+              latlong: `${results.geometry.location.toJSON().lat}/${results.geometry.location.toJSON().lng}`
+              }
+    },
+
+    abrevToFull(abbrev) {
+      let list = {
+        AB: "Alberta",
+				BC: "British Columbia",
+				MB: "Manitoba",
+				NB: "New Brunswick",
+				NT: "Northwest Territories",
+				NS: "Nova Scotia",
+				NU: "Nunavut",
+				ON: "Ontario",
+				PE: "Prince Edward Island",
+				QC: "Quebec",
+				SK: "Saskatchewan",
+				YT: "Yukon",
+				NL: "Newfoundland and Labrador",
+      }
+      return list.abbrev
+
+    },
+
 
     createMarker(place) {
       console.log(place);

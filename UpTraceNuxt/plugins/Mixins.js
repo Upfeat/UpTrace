@@ -36,11 +36,13 @@ if(!Vue.SAMLAuthenticate) {
                         withCredentials: true,
                         data: jsonBody
                     })
-
                     let output;
 
                     try {
                         output = axiosReturn.data
+                        if(output === undefined) {
+                            console.log("It is undefined in mixin")
+                        }
                         output.value = JSON.parse(output.value)
                         console.log("OUTPUT VALUE = "+JSON.stringify(output))
                     } catch(error){
@@ -60,8 +62,8 @@ if(!Vue.SAMLAuthenticate) {
                     }
 
                 } catch(error) {
-                    //console.log("ERROR CATCH:" + error + " + " + error.response )
-                    return error.response;
+                    console.log("ERROR CATCH:" + error + " + " + error.response )
+                    return {value: [], valid: false};
                 }
             }
         }

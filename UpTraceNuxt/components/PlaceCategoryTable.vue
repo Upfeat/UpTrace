@@ -1,14 +1,14 @@
 <template>
 <v-card>
     <v-card-title>
-        Places
+        Categories
     </v-card-title>
     <v-spacer>
 
     </v-spacer>
   <v-data-table
     :headers="headers"
-    :items="placeData"
+    :items="placeCategoryData"
     :items-per-page="5"
     class="elevation-1"
     @click:row="handleClick"
@@ -20,26 +20,22 @@
 <script>
 export default {
     props: {
-        placeData: Array
+        placeCategoryData: Array
     },
     
     computed: {
         headers() {
+
             return [
                 {text: 'Name', value: 'name'},
-                {text: 'Phone Number', value: 'phoneNumber'},
-                {text: 'Email Address', value: 'emailAddress'},
-                {text: 'Catagory', value: 'catagory'},
                 {text: 'Type', value: 'type'},
-                {text: 'Address', value: 'address'},
-                {text: 'Latitude/Longtitude', value: 'latlong'},
-                {text: 'Google Place ID', value: 'placeID'},
+                {text: 'Status', value: 'status'},
             ]
         }
     },
     methods: {
-        handleClick(place) {
-            this.$router.push({ path: `editplace/${place.uuid}` })
+        handleClick(placeCategory) {
+            this.$router.push({ path: `editplacecategory/${placeCategory.uuid}` })
         },
     }
 }

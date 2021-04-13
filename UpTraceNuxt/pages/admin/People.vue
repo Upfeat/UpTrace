@@ -5,7 +5,13 @@
             <v-flex class="text-right">
                 <v-btn type="button" color="lightblue" class="white--text" @click="toAddMember()">+ Add Member</v-btn>
             </v-flex>
-            <PeopleTable :people-data="peopleData"/>
+            <div v-if="peopleData">
+                <PeopleTable :people-data="peopleData"/>
+
+            </div>
+            <div v-else>
+                <v-card-title>No Data</v-card-title>
+            </div>
         </v-card>        
     </v-container>
 </template>
@@ -14,10 +20,9 @@
 import PeopleTable from '../../components/PeopleTable.vue'
 export default {
   components: { PeopleTable },
-    layout: 'adminnav',
-
+  
     props:{
-        peopleData: Array
+        data: Object
     },
 
     created() {
@@ -33,6 +38,7 @@ export default {
     data() {
         return {
             title: "People",
+            peopleData: this.data.people
         }
     },
 

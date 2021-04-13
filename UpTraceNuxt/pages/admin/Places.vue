@@ -5,7 +5,10 @@
             <v-flex class="text-right">
                 <v-btn type="button" color="lightblue" class="white--text" @click="toAddPlace()">+ Add Place</v-btn>
             </v-flex>
-            <PlacesTable :place-data="placeData"/>
+            <div>
+                <PlacesTable :place-data="placesData"/>
+            </div>
+
         </v-card>        
     </v-container>
 </template>
@@ -14,15 +17,15 @@
 import PlacesTable from '../../components/PlacesTable.vue'
 export default {
   components: { PlacesTable },
-    layout: 'adminnav',
 
     props:{
-        placeData: Array
+        data: Object
     },
 
     data() {
         return {
             title: "Places",
+            placesData: this.data.places
         }
     },
 
