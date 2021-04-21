@@ -1,16 +1,14 @@
 <template>
-    <v-container>
+    <v-container class="people-content">
         <AdminPageTitle :title="title"/>
         <v-card>
             <v-flex class="text-right">
-                <v-btn type="button" color="lightblue" class="white--text" @click="toAddMember()">+ Add Member</v-btn>
+                <v-btn type="button" color="lightblue" class="add-btn" @click="toAddMember()">+ Add Member</v-btn>
             </v-flex>
+            <v-spacer></v-spacer>
             <div v-if="peopleData">
                 <PeopleTable :people-data="peopleData"/>
 
-            </div>
-            <div v-else>
-                <v-card-title>No Data</v-card-title>
             </div>
         </v-card>        
     </v-container>
@@ -55,6 +53,14 @@ export default {
 
 </script>
 
-<style>
-
+<style scoped>
+.people-content {
+    font-family: "Montserrat-Regular" !important;
+}
+.add-btn {
+    color: white;
+    margin-bottom: 0.5% !important;
+    margin-top: 1% !important;
+    margin-right: 1% !important;
+}
 </style>

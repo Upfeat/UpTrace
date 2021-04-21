@@ -1,15 +1,16 @@
+//NEEDS TO BE CHANGED//////////// 
+const APP_URL = 'https://uptraceuofm.uc.r.appspot.com'
+const PROJECT_ID = 'uptraceuofm';
+/////////////////////////////////
+
 const Firestore = require('@google-cloud/firestore');
 const {SecretManagerServiceClient} = require('@google-cloud/secret-manager');
 const jwt = require('jsonwebtoken');
 const validator = require('@authenio/samlify-node-xmllint');
 const saml = require('samlify');
 
-const APP_URL = 'https://uptraceuofm.uc.r.appspot.com'
-const SAML_LOGIN_REDIRECT = 'https://accounts.google.com/o/saml2/idp?idpid=C032x590p&SAMLRequest=fZJNj9MwEIb%2FSuS7EyfesBurKeq2WlFpgWpbOHBBxpl0LTl28Ixh%2BfekKfsBEnvwZTzP%2BH2sWaAe3KhWie79HXxPgJQ9DM6jmi9alqJXQaNF5fUAqMio%2Fer9rapyocYYKJjg2AvkdUIjQiQbPMu2m5Z9rXrZNeZSctM1kl%2F0oue6uZC8r2sBtW50KRuWfYaIE9OyacQEIibYeiTtaSqJquRC8lIeKqnEpZJXuXhz9YVlm8nFek0zeU80oioKbUxInjA%2FhnB0kJswFKE4Ba8K241vp2O7di1k9VA3YmTZ7o%2FjtfWd9cfX9b6dm1C9Oxx2fPdxf2DZ6lF5HTymAeIe4g9r4NPd7XOshNyAp6hdyTURDCNVXIqqrkRuXEhdn7w5DcHcA00WyEu2XJxyq%2Fk%2F4vLJ8B88QR5zPY44Bpp1F8VLbHFegA%2BTy3azC86aX9lNiIOm%2F6uWeTlXbMf7uVXBoK1bdV0ExEnZufBzHUETtKzXDoEVy%2FOzf6%2Fa8jc%3D'
-
 saml.setSchemaValidator(validator);
 
-const PROJECTID = 'uptraceuofm';
 const COLLECTION_NAME = 'Admins';
 
 const SP_SECRET = 'SecretSP';
@@ -19,19 +20,15 @@ const RT_SECRET = 'SecretRT';
 var sp;
 var idp;
 var aToken;
-var rToken;
-var logList = [];
+var rToken; //TODO - will eventually store the refresh token for the JWT 
 
 
-const firestore = new Firestore({
-  projectId: PROJECTID,
-  timestampsInSnapshots: true,
-});
 
+//SECRET MANAGER FUNCTIONS
 const client = new SecretManagerServiceClient();
 
 function getSecretPath(secretName) {
-  return `projects/uptraceuofm/secrets/${secretName}/versions/latest`;
+  return `projects/${PROJECT_ID}/secrets/${secretName}/versions/latest`;
 }
 
 async function accessSecretVersion(secretPath) {
@@ -56,6 +53,13 @@ async function injectSecrects() {
   aToken = await accessSecretVersion(getSecretPath(AT_SECRET));
   rToken = await accessSecretVersion(getSecretPath(RT_SECRET));
 }
+////////////////////////////////////
+
+//FIRESTORE FUNCTIONS
+const firestore = new Firestore({
+  PROJECT_ID: PROJECT_ID,
+  timestampsInSnapshots: true,
+});
 
 async function getAdminAccount(userEmail) {
     const userRef = firestore.collection(COLLECTION_NAME).doc(userEmail);
@@ -69,11 +73,10 @@ function createAdminAccount(userEmail) {
     role:    "admin"
   });
 }
+///////////////////////////////////
 
-function createToken(email) {
-  return jwt.sign({name: email}, aToken);
-}
 
+//AUTHENTICATION FUNCTIONS 
 var getCookies = function(req) {
   if(!req.headers.cookie) return null;
 
@@ -99,6 +102,7 @@ function authenticateToken(req) {
   })
   return valid;
 }
+//////////////////////////////////////////
 
 async function APIGateway(req, res) {
 
@@ -106,10 +110,14 @@ async function APIGateway(req, res) {
 
   const controllerRouter = {
     people() { return require('./Controllers/PeopleController')},
-    places() { return require('./Controllers/PlacesController')}
+    places() { return require('./Controllers/PlacesController')},
+    placeCategory()  { return require('./Controllers/PlaceCategoryController')},
+    transportation() { return require('./Controllers/TransportationController')}
   }
 
   var actionStr = req.body.action;
+  console.log("action string = " + actionStr)
+  console.log("data: " +req.body.data)
   var instructions = actionStr.split('/');
   var controllerName = instructions[0];
   var methodName = instructions[1];
@@ -143,13 +151,6 @@ function toJSON(value) {
 exports.acs = async (req, res) => {
   try {
 
-    const corsWhitelist = [
-      APP_URL,
-      SAML_LOGIN_REDIRECT
-    ]
-    if(corsWhitelist.indexOf(req.headers.origin) !== -1) {
-
-    }
     res.set('Access-Control-Allow-Origin', req.headers.origin);
     res.set('Access-Control-Allow-Credentials', 'true');
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");

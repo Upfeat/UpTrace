@@ -5,9 +5,11 @@ const { v4: uuidv4} = require('uuid')
 class PersonRepository {
 
     constructor() {
+        //NEEDS TO BE CHANGED
         this.PROJECT_ID = 'uptraceuofm'
-        this.COLLECTION_NAME = 'People'
+        //////////////////////////////
 
+        this.COLLECTION_NAME = 'People'
         this.encryptedKeys = ['firstName','lastName','address','address2','postalCode','phoneNumber','emailAddress']
 
         this.firestore = new Firestore({

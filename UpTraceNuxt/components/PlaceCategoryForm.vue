@@ -58,7 +58,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .title {
   border-bottom: solid 2px lightgray;
   padding-bottom: 10px;

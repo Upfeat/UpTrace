@@ -4,8 +4,10 @@ const { v4: uuidv4} = require('uuid')
 class PlaceRepository {
 
     constructor() {
+        //NEEDS TO BE CHANGED
         this.PROJECT_ID = 'uptraceuofm'
-        this.COLLECTION_NAME = 'Place'
+        //////////////////////////////
+        this.COLLECTION_NAME = 'Places'
 
         this.firestore = new Firestore({
             projectId: this.PROJECT_ID,
@@ -15,6 +17,8 @@ class PlaceRepository {
 
 
     create(place) {
+        console.log("PLACE REPO: " +place)
+
         const uuid = uuidv4();
         place["uuid"] = uuid
         this.firestore.collection(this.COLLECTION_NAME).doc(uuid).set(place)
@@ -56,4 +60,4 @@ class PlaceRepository {
     }
 }
 
-module.exports = new PersonRepository();
+module.exports = new PlaceRepository();

@@ -24,7 +24,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .title2 {
     font-family: 'Montserrat-Regular';
     overflow: visible;

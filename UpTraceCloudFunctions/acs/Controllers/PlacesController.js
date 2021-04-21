@@ -1,28 +1,32 @@
 const placesService = require('../Services/Places')
-class placesController {
+class PlacesController {
 
     constructor() {
     }
 
     async readAll() {
-        return await placesService.readAll();
+        let places = await placesService.readAll();
+        console.log("Reading places: " + places)
+        return places
     }
 
     addPlace(place) {
-        placesService.addPerson(place)
-        return person;
+        console.log("PLACE CONTROLLER: " +place)
+
+        placesService.addPlace(place)
+        return place;
     }
 
     async readPlaceFromID(data) {
-        return await placesService.readPersonFromID(data.uuid)
+        return await placesService.readPlaceFromID(data.uuid)
     }
 
     updatePlace(place) {
-        placesService.updatePerson(place)
+        placesService.updatePlace(place)
     }
 
     deletePlace(data) {
-        placesService.deletePerson(data.uuid)
+        placesService.deletePlace(data.uuid)
     }
 
 }

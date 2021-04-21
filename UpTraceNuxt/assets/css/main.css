@@ -13,3 +13,11 @@
     font-display: swap;
     src: url('~assets/fonts/Montserrat-SemiBold.ttf') format('truetype');
   }
+
+  @font-face {
+    font-family: 'Montserrat-Bold';
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: url('~assets/fonts/Montserrat-Bold.ttf') format('truetype');
+  }

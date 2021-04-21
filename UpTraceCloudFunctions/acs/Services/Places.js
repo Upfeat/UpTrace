@@ -7,6 +7,8 @@ class Places {
     }
 
     addPlace(place) {
+        console.log("PLACE SERVICE: " +place)
+
         repository.create(place);
     }
 
@@ -28,4 +30,4 @@ class Places {
     }
 }
 
-module.exports = new Place();
+module.exports = new Places();

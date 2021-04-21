@@ -21,7 +21,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .logo {
   color: white;
   font-family: 'Montserrat-SemiBold';

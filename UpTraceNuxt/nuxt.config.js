@@ -35,9 +35,7 @@ export default {
   ],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
-  plugins: [
-    {src: '~/plugins/Mixins.js'} 
-  ],
+
 
   // Auto import components: https://go.nuxtjs.dev/config-components
   components: true,
@@ -78,5 +76,14 @@ export default {
       }
     }
   },
+
+  plugins: [
+    {src: '~/plugins/Mixins.js'},
+    {src: '~/plugins/fireauth.js'},
+    {src: '~/plugins/encryption.js'},
+    {src: '~/plugins/personRepo.js'},
+    {src: '~/plugins/placeRepo.js'}  
+
+  ],
 
 }

@@ -1,6 +1,6 @@
 <template>
     <v-container>
-        <GoogleMaps ref="gMaps" :apiKey="apiKey" :query="textQuery" @selected-place-details="updatePlaceDetails" @update-auto-complete="updateAutoComplete"/>
+        <GoogleMaps ref="gMaps" :admin="admin" :apiKey="apiKey" :query="textQuery" @selected-place-details="updatePlaceDetails" @update-auto-complete="updateAutoComplete"/>
     </v-container>
 </template>
 
@@ -11,6 +11,7 @@ export default {
 
     props: {
         textQuery: String,
+        admin: Boolean
     },
 
     data() {
@@ -52,6 +53,6 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 
 </style>
