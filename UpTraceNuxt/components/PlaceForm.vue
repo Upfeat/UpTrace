@@ -35,16 +35,18 @@
           <v-row>
             <v-col cols="12" :md="colLen">
               <v-autocomplete
-                v-model="items.catagories"
-                :items="catagories"
-                label="Catagory"
-                @input="onInput()"
+                v-model="items.category"
+                :items="placeCategoryData"
+                item-text="name"
+                label="Category"
+                return-object
+                @select="onInput()"
               ></v-autocomplete>
             </v-col>
             <v-col cols="12" :md="colLen">
               <v-autocomplete
-                v-model="items.types"
-                :items="types"
+                v-model="items.type"
+                :items="type"
                 label="Types"
                 @input="onInput()"
               ></v-autocomplete>
@@ -109,66 +111,66 @@
               </v-row>
               <!-- Fields -->
               <div v-if="manualEnter">
-              <v-row>
-                <v-col cols="12" :md="colLen">
-                  <v-text-field
-                    v-model="items.address"
-                    label="Address Line 1"
-                    @input="onInput()"
-                  >
-                  </v-text-field>
-                </v-col>
-                <v-col cols="12" :md="colLen">
-                  <v-text-field
-                    v-model="items.address2"
-                    label="Address Line 2"
-                    @input="onInput()"
-                  >
-                  </v-text-field>
-                </v-col>
-              </v-row>
-              <v-row>
-                <v-col cols="12" :md="colLen">
-                  <v-text-field
-                    v-model="items.city"
-                    label="City"
-                    @input="onInput()"
-                  >
-                  </v-text-field>
-                </v-col>
-                <v-col cols="12" :md="colLen">
-                  <v-autocomplete
-                    v-model="items.provinceOrTerritory"
-                    :items="provinceOrTerritory"
-                    label="Province/Territory"
-                    @input="onInput()"
-                  ></v-autocomplete>
-                </v-col>
-              </v-row>
-              <v-row>
-                <v-col cols="12" :md="colLen">
-                  <v-text-field
-                    v-model="items.postalCode"
-                    label="Postal Code"
-                    @keyup="onInput()"
-                  >
-                  </v-text-field>
-                </v-col>
-                <v-col cols="12" :md="colLen">
-                  <v-text-field
-                    v-model="items.latlong"
-                    label="Latitude/Longtitude"
-                    @input="onInput()"
-                  >
-                  </v-text-field>
-                </v-col>
-              </v-row>
+                <v-row>
+                  <v-col cols="12" :md="colLen">
+                    <v-text-field
+                      v-model="items.address"
+                      label="Address Line 1"
+                      @input="onInput()"
+                    >
+                    </v-text-field>
+                  </v-col>
+                  <v-col cols="12" :md="colLen">
+                    <v-text-field
+                      v-model="items.address2"
+                      label="Address Line 2"
+                      @input="onInput()"
+                    >
+                    </v-text-field>
+                  </v-col>
+                </v-row>
+                <v-row>
+                  <v-col cols="12" :md="colLen">
+                    <v-text-field
+                      v-model="items.city"
+                      label="City"
+                      @input="onInput()"
+                    >
+                    </v-text-field>
+                  </v-col>
+                  <v-col cols="12" :md="colLen">
+                    <v-autocomplete
+                      v-model="items.provinceOrTerritory"
+                      :items="provinceOrTerritory"
+                      label="Province/Territory"
+                      @input="onInput()"
+                    ></v-autocomplete>
+                  </v-col>
+                </v-row>
+                <v-row>
+                  <v-col cols="12" :md="colLen">
+                    <v-text-field
+                      v-model="items.postalCode"
+                      label="Postal Code"
+                      @keyup="onInput()"
+                    >
+                    </v-text-field>
+                  </v-col>
+                  <v-col cols="12" :md="colLen">
+                    <v-text-field
+                      v-model="items.latlong"
+                      label="Latitude/Longtitude"
+                      @input="onInput()"
+                    >
+                    </v-text-field>
+                  </v-col>
+                </v-row>
               </div>
               <div v-else-if="locationChosen">
                 <v-card class="locationInfo" flat tile color="grey lighten-3">
-                  <v-card-title>{{this.items.name}}</v-card-title>
-                  <v-card-text>{{this.items.address}}</v-card-text>
-                  <v-card-text>{{this.items.latlong}}</v-card-text>
+                  <v-card-title>{{ this.items.name }}</v-card-title>
+                  <v-card-text>{{ this.items.address }}</v-card-text>
+                  <v-card-text>{{ this.items.latlong }}</v-card-text>
                 </v-card>
               </div>
             </v-col>
@@ -193,16 +195,15 @@
 export default {
   props: {
     value: Object,
-    placeCatagoryData: Array,
-    manualEnter: Boolean
+    placeCategoryData: Array,
+    manualEnter: Boolean,
   },
 
   data() {
     return {
       items: [],
       colLen: 3,
-      types: ["public", "private"],
-      catagories: this.placeCatagoryData,
+      type: ["public", "private"],
       provinceOrTerritory: [
         "Alberta",
         "British Columbia",
@@ -222,13 +223,13 @@ export default {
       search: null,
       locations: [],
       selectedLocation: null,
-      locationChosen: false
+      locationChosen: false,
     };
   },
 
   created() {
     this.items = this.value;
-    console.log("Place Catagory Data: " + this.placeCatagoryData)
+    console.log("Place Category Data: " + this.placeCategoryData);
   },
 
   methods: {
@@ -295,7 +296,7 @@ export default {
   padding-bottom: 10px;
 }
 .form {
-    font-family: 'Montserrat-Regular';
+  font-family: "Montserrat-Regular";
 }
 
 .locationInfo {
@@ -303,6 +304,6 @@ export default {
 }
 
 .placeLookup {
-    margin-top: 20px;
+  margin-top: 20px;
 }
 </style>

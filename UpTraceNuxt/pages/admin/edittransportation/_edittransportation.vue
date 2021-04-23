@@ -2,7 +2,7 @@
     <v-container v-if="loaded">
         <AdminPageTitle :title="title"/>
         <v-card>
-        <TransportationForm v-model="transportationData" @update-data="updateData"/>
+        <AdminTransportationForm v-model="transportationData" @update-data="updateData"/>
         <v-btn color="lightblue" class="white--text" type="button" elevation="1" @click="updateTransportation()">
             Save
         </v-btn>   
@@ -13,7 +13,7 @@
 
     </v-container>
     <v-container v-else>
-        <Loading />
+        <AdminLoading />
     </v-container>
 </template>
 

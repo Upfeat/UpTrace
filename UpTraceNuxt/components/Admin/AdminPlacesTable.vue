@@ -1,11 +1,11 @@
 <template>
-  <v-container>
+  <v-container class="page-content">
     <v-spacer> </v-spacer>
     <div>
       <v-data-table
         class="table"
         :headers="headers"
-        :items="transportationData"
+        :items="placeData"
         :items-per-page="5"
         :page.sync="page"
         hide-default-footer
@@ -13,10 +13,14 @@
       >
         <template v-slot:item="row">
           <tr style="height: 100px">
+            <td class="text-xs-right">{{ row.item.name }}</td>
+            <td class="text-xs-right">{{ row.item.phoneNumber }}</td>
+            <td class="text-xs-right">{{ row.item.email }}</td>
+            <td class="text-xs-right">{{ row.item.category.name }}</td>
             <td class="text-xs-right">{{ row.item.type }}</td>
-            <td class="text-xs-right">{{ row.item.identifier }}</td>
-            <td class="text-xs-right">{{ row.item.startDate }}</td>
-            <td class="text-xs-right">{{ row.item.endDate }}</td>
+            <td class="text-xs-right">{{ row.item.address }}</td>
+            <td class="text-xs-right">{{ row.item.latlong }}</td>
+            <td class="text-xs-right">{{ row.item.placeID }}</td>
             <td>
               <v-btn
                 class="mx-2"
@@ -30,7 +34,7 @@
           </tr>
         </template>
       </v-data-table>
-      <div>
+      <div class="pagination-btns">
         <v-layout justify-end>
           <v-pagination v-model="page" :length="pageCount"> </v-pagination>
         </v-layout>
@@ -42,29 +46,31 @@
 <script>
 export default {
   props: {
-    transportationData: Array,
+    placeData: Array,
   },
-
   data() {
     return {
       page: 1,
       pageCount: 0,
     };
   },
-
   computed: {
     headers() {
       return [
+        { text: "Name", value: "name" },
+        { text: "Phone Number", value: "phoneNumber" },
+        { text: "Email Address", value: "email" },
+        { text: "Category", value: "category" },
         { text: "Type", value: "type" },
-        { text: "Identifier", value: "identifier" },
-        { text: "Start Date", value: "startDate" },
-        { text: "End Date", value: "endDate" },
+        { text: "Address", value: "address" },
+        { text: "Latitude/Longtitude", value: "latlong" },
+        { text: "Google Place ID", value: "placeID" },
       ];
     },
   },
   methods: {
-    handleClick(transportation) {
-      this.$router.push({ path: `edittransportation/${transportation.uuid}` });
+    handleClick(place) {
+      this.$router.push({ path: `editplace/${place.uuid}` });
     },
   },
 };

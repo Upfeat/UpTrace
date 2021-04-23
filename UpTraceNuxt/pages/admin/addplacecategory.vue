@@ -5,7 +5,7 @@
             <AdminPageTitle :title="title"/>
             <v-row>
                 <v-col>
-                    <PlaceCategoryForm  v-model="placeCategoryData"/>
+                    <AdminPlaceCategoryForm  v-model="placeCategoryData"/>
                 </v-col>
             </v-row>
             <v-btn color="lightblue" class="white--text" type="button" @click="submit()">

@@ -1,7 +1,7 @@
 <template>
     <v-container>
         <AdminPageTitle :title="title"/>
-        <PeopleForm v-model="peopleData"/>
+        <AdminPeopleForm v-model="peopleData"/>
         <v-btn color="lightblue" class="white--text" type="button" @click="submit()">
             + Add Member
         </v-btn>

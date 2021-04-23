@@ -14,7 +14,7 @@
       <v-spacer></v-spacer>
 
       <div>
-        <PlacesTable
+        <AdminPlacesTable
           :place-data="placesData"
           :place-categories="placeCategoryData"
         />
@@ -24,9 +24,7 @@
 </template>
 
 <script>
-import PlacesTable from "../../components/PlacesTable.vue";
 export default {
-  components: { PlacesTable },
 
   props: {
     data: Object,

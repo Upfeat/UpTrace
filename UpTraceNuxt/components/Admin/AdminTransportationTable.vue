@@ -1,9 +1,11 @@
 <template>
   <v-container>
+    <v-spacer> </v-spacer>
     <div>
       <v-data-table
+        class="table"
         :headers="headers"
-        :items="peopleData"
+        :items="transportationData"
         :items-per-page="5"
         :page.sync="page"
         hide-default-footer
@@ -11,12 +13,10 @@
       >
         <template v-slot:item="row">
           <tr style="height: 100px">
-            <!-- Does nothing. height: 100px works fine. -->
-            <td>{{ row.item.lastName }}</td>
-            <td class="text-xs-right">{{ row.item.lastName }}</td>
-            <td class="text-xs-right">{{ row.item.address }}</td>
-            <td class="text-xs-right">{{ row.item.phoneNumber }}</td>
-            <td class="text-xs-right">{{ row.item.emailAddress }}</td>
+            <td class="text-xs-right">{{ row.item.type }}</td>
+            <td class="text-xs-right">{{ row.item.identifier }}</td>
+            <td class="text-xs-right">{{ row.item.startDate }}</td>
+            <td class="text-xs-right">{{ row.item.endDate }}</td>
             <td>
               <v-btn
                 class="mx-2"
@@ -30,7 +30,7 @@
           </tr>
         </template>
       </v-data-table>
-      <div class="pagination-btns">
+      <div>
         <v-layout justify-end>
           <v-pagination v-model="page" :length="pageCount"> </v-pagination>
         </v-layout>
@@ -42,7 +42,7 @@
 <script>
 export default {
   props: {
-    peopleData: Array,
+    transportationData: Array,
   },
 
   data() {
@@ -55,17 +55,16 @@ export default {
   computed: {
     headers() {
       return [
-        { text: "FIRST NAME", value: "firstName" },
-        { text: "LAST NAME", value: "lastName" },
-        { text: "ADDRESS", value: "address" },
-        { text: "PHONE NUMBER", value: "phoneNumber" },
-        { text: "EMAIL ADDRESS", value: "emailAddress" },
+        { text: "TYPE", value: "type" },
+        { text: "IDENTIFIER", value: "identifier" },
+        { text: "START DATEE", value: "startDate" },
+        { text: "END DATE", value: "endDate" },
       ];
     },
   },
   methods: {
-    handleClick(person) {
-      this.$router.push({ path: `editperson/${person.uuid}` });
+    handleClick(transportation) {
+      this.$router.push({ path: `edittransportation/${transportation.uuid}` });
     },
   },
 };
@@ -73,27 +72,17 @@ export default {
 
 <style>
 td {
-  height: 50px !important;  
-  border-bottom: none !important;
-  border-top: solid 1px #e1e1e1 !important;
-
-}
-
-th {
-    border: none 1px !important;
-}
-
-tr {
-  border: 0px none !important;
-  
+  height: 100px !important;
 }
 
 .v-pagination {
   margin-top: 70px !important;
 }
 
-.v-data-table {  
-  font-family: "Montserrat-Regular";
+.v-data-table {
+  border-top: solid 1px #e1e1e1 !important;
+  border-bottom: solid 1px #e1e1e1 !important;
+
   border-radius: 0px;
 }
 </style>

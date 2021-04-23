@@ -2,7 +2,7 @@
     <v-container v-if="loaded">
         <AdminPageTitle :title="title"/>
         <v-card>
-        <PlaceCategoryForm v-model="placeCategoryData" @update-data="updateData"/>
+        <AdminPlaceCategoryForm v-model="placeCategoryData" @update-data="updateData"/>
         <v-btn color="lightblue" class="white--text" type="button" elevation="1" @click="updatePlaceCategory()">
             Save
         </v-btn>   
@@ -13,7 +13,7 @@
 
     </v-container>
     <v-container v-else>
-        <Loading />
+        <AdminLoading />
     </v-container>
 </template>
 

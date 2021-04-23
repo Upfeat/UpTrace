@@ -53,9 +53,9 @@ export default {
   computed: {
     headers() {
       return [
-        { text: "Name", value: "name" },
-        { text: "Type", value: "type" },
-        { text: "Status", value: "status" },
+        { text: "NAME", value: "name" },
+        { text: "TYPE", value: "type" },
+        { text: "STATUS", value: "status" },
       ];
     },
   },

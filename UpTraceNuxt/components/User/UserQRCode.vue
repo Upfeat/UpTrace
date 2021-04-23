@@ -84,8 +84,8 @@ export default {
 }
 
 #canvas {
-    width: 400px;
-    height: 400px;
+    width: 300px !important;
+    height: 300px !important;
 }
 .prompt {
     font-family: "Montserrat-SemiBold" !important;

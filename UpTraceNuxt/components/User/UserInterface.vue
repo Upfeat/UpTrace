@@ -1,8 +1,8 @@
 <template>
   <v-container>
     <v-card :width="cardWidth">
-      <PersonPlacePicker
-        v-if="interfaceState == 'PersonPlacePicker'"
+      <UserPersonPlacePicker
+        v-if="interfaceState == 'UserPersonPlacePicker'"
         :isRegistering="isRegistering"
         @pick-person="personSelection"
         @pick-place="placeSelection"
@@ -14,20 +14,20 @@
         v-if="interfaceState == 'UserRegistrationForm'"
         @user-registered="userHasRegistered"
       />
-      <QRCode
-        v-if="interfaceState == 'QRCode'"
+      <UserQRCode
+        v-if="interfaceState == 'UserQRCode'"
         :recently-registered="hasRegistered"
         :already-registered="alreadyRegistered"
         @go-back="undoPersonPlaceSelection"
         @update-title="updateTitle"
       />
-      <PlaceRegistrationForm
+      <UserPlaceRegistrationForm
         :user-email="loggedIn.email"
-        v-if="interfaceState == 'PlaceRegistrationForm'"
+        v-if="interfaceState == 'UserPlaceRegistrationForm'"
         @place-registered="userHasRegistered"
       />
-      <QRCodeScanner
-        v-if="interfaceState == 'QRCodeScanner'"
+      <UserQRCodeScanner
+        v-if="interfaceState == 'UserQRCodeScanner'"
         @update-title="updateTitle"
         @go-back="undoPersonPlaceSelection"
       />
@@ -45,10 +45,14 @@ export default {
       hasRegistered: false,
       alreadyRegistered: false,
       uuid: null,
-      cardWidth: "700px",
-      cardHeight: "400px",
-      placeRegistrationFormWidth: "700px",
-      placeRegistrationFormHeight: "600px",
+      widths: {
+        userPersonPlacePicker: "700px",
+        userLogin: "500px",
+        userRegistrationForm: "500px",
+        userQRCode: "500px",
+        userPlaceRegistrationForm: "700px",
+        userQRCodeScanner: "700px"
+      },
       loading: false,
     };
   },
@@ -58,36 +62,36 @@ export default {
 
       if (!this.person && !this.place) {
         //initial state
-        state = "PersonPlacePicker";
+        state = "UserPersonPlacePicker";
+
       } else if (this.loggedIn) {
         //console.log("IS IT IN REPO: "+personRepo.checkForEmail(this.loggedIn.email))
         if (this.person) {
           if (this.isRegistering) {
             if (this.$store.state.personRegistered) {
               this.alreadyRegistered = true;
-              state = "QRCode";
+              state = "UserQRCode";
             } else if (this.hasRegistered) {
-              state = "QRCode";
+              state = "UserQRCode";
             } else {
               state = "UserRegistrationForm";
             }
           } else {
-            state = "QRCode";
+            state = "UserQRCode";
+
           }
         } else if (this.place) {
           if (this.isRegistering) {
             if (this.$store.state.placeRegistered) {
               this.alreadyRegistered = true;
-              state = "QRCodeScanner";
+              state = "UserQRCodeScanner";
             } else if (this.hasRegistered) {
-              state = "QRCodeScanner";
+              state = "UserQRCodeScanner";
             } else {
-              this.cardWidth = this.placeRegistrationFormWidth;
-              this.cardHeight = this.placeRegistrationFormHeight;
-              state = "PlaceRegistrationForm"; //TODO
+              state = "UserPlaceRegistrationForm"; //TODO
             }
           } else {
-            state = "QRCodeScanner";
+            state = "UserQRCodeScanner";
           }
         }
       } else {
@@ -110,6 +114,33 @@ export default {
       }
       return defaultTitle
     },
+
+    cardWidth() {
+      var width
+      switch(this.interfaceState) {
+        case "UserPersonPlacePicker": 
+          width = this.widths.userPersonPlacePicker
+          break
+        case "UserLogin":
+          width = this.widths.userLogin
+          break
+        case "UserRegistrationForm":
+          width = this.widths.userRegistrationForm
+          break
+        case "UserQRCode":
+          width = this.widths.userQRCode
+          break 
+        case "UserPlaceRegistrationForm":
+          width = this.widths.userPlaceRegistrationForm
+          break 
+        case "UserQRCodeScanner":
+          width = this.widths.userQRCodeScanner
+          break
+        default:
+          width = "700px"
+      }
+      return width
+    }
   },
   methods: {
     logInSelection() {

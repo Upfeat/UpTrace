@@ -3,10 +3,10 @@
         <AdminPageTitle :title="title"/>
         <v-card>
             <v-flex class="text-right">
-                <v-btn type="button" color="lightblue" class="add-btn" @click="toAddCategory()">+ Add Catagory</v-btn>
+                <v-btn type="button" color="lightblue" class="add-btn" @click="toAddCategory()">+ Add Category</v-btn>
             </v-flex>
             <div>
-                <TransportationTable :transportation-data="transportationData"/>
+                <AdminTransportationTable :transportation-data="transportationData"/>
             </div>
 
         </v-card>        
@@ -14,9 +14,7 @@
 </template>
 
 <script>
-import TransportationTable from '../../components/TransportationTable.vue'
 export default {
-  components: { TransportationTable },
     props:{
         data: Object
     },

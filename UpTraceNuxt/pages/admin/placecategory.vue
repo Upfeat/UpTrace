@@ -6,7 +6,7 @@
                 <v-btn type="button" color="lightblue" class="add-btn" @click="toAddPlaceCategory()">+ Add Category</v-btn>
             </v-flex>
             <div>
-                <PlaceCategoryTable :place-category-data="placeCategoryData"/>
+                <AdminPlaceCategoryTable :place-category-data="placeCategoryData"/>
             </div>
 
         </v-card>        
@@ -14,10 +14,7 @@
 </template>
 
 <script>
-import PlaceCategoryTable from '../../components/PlaceCategoryTable.vue'
 export default {
-  components: { PlaceCategoryTable },
-
     props:{
         data: Object
     },

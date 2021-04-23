@@ -2,7 +2,7 @@
     <v-container v-if="loaded">
         <AdminPageTitle :title="title"/>
         <v-card>
-        <PlaceForm v-model="placeData" @update-data="updateData"/>
+        <AdminPlaceForm v-model="placeData" :place-category-data="placeCategoryData" @update-data="updateData"/>
         <v-btn color="lightblue" class="white--text" type="button" elevation="1" @click="updatePlace()">
             Save
         </v-btn>   
@@ -13,12 +13,15 @@
 
     </v-container>
     <v-container v-else>
-        <Loading />
+        <AdminLoading />
     </v-container>
 </template>
 
 <script>
 export default {
+    props: {
+        placeCategoryData: Array
+    },
     created() {
         console.log(this.$route.params)
         this.getData()

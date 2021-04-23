@@ -67,14 +67,11 @@ Before hosting the app on google cloud, you must configure a few things
         * From the root directory of the project, navigate to UpTraceNuxt
         * Make sure the dependancies have been installed by running "npm install" in the command line  
         * Run the command "npm run deploy" to deploy to app engine
-
-* **IMPORTANT TODOS** 
-    * The Google Maps API key should not be exposed in the front end of the application
-    * The Firestore config object should not be exposed in the front end of the application
-    * Google authentication for user log in should set a cookie
-
-
-
+    
+    * **Running the app locally**
+        * Run the command "npm run dev" to start a local development server
+    * **Getting the metadata**
+        * Look here to get started: https://samlify.js.org/#/basic
 
 
 

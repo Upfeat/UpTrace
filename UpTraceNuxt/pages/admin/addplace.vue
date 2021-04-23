@@ -7,7 +7,7 @@
           <PlaceForm
             ref="placeForm"
             :manual-enter="manualEnter"
-            :place-catagory-data="placeCatagoryData"
+            :place-category-data="placeCategoryData"
             v-model="placeData"
           />
         </v-col>
@@ -80,8 +80,10 @@ export default {
         this.formatJsonBody({}, "placeCategory", "readAll")
       ).then((response) => {
         _this.placeCategoryData = response.value;
+        console.log("Category Response "+JSON.stringify(response.value))
+
       });
-      console.log("addplace: "+ JSON.stringify(this.placeCategoryData + " or " + JSON.stringify(_this.placeCategoryData)))
+      console.log("addplace: "+ JSON.stringify(this.placeCategoryData) + " or " + JSON.stringify(_this.placeCategoryData))
     },
 
   },

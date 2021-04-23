@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="user-login">
     <div id="firebaseui-auth-container"></div>
     <v-flex class="text-center">
       <v-btn text type="button" @click="goBack()">Back</v-btn>
@@ -57,4 +57,8 @@ export default {
   },
 };
 </script>
-<style src="~/node_modules/firebaseui/dist/firebaseui.css"></style>
+<style src="~/node_modules/firebaseui/dist/firebaseui.css">
+.user-login {
+  margin-top: 100px !important;
+}
+</style>

@@ -1,11 +1,9 @@
 <template>
-  <v-container class="page-content">
-    <v-spacer> </v-spacer>
+  <v-container>
     <div>
       <v-data-table
-        class="table"
         :headers="headers"
-        :items="placeData"
+        :items="peopleData"
         :items-per-page="5"
         :page.sync="page"
         hide-default-footer
@@ -13,14 +11,11 @@
       >
         <template v-slot:item="row">
           <tr style="height: 100px">
-            <td class="text-xs-right">{{ row.item.name }}</td>
+            <td class="text-xs-right">{{ row.item.firstName }}</td>
+            <td class="text-xs-right">{{ row.item.lastName }}</td>
+            <td class="text-xs-right">{{ row.item.address }}</td>
             <td class="text-xs-right">{{ row.item.phoneNumber }}</td>
             <td class="text-xs-right">{{ row.item.emailAddress }}</td>
-            <td class="text-xs-right">{{ row.item.catagory }}</td>
-            <td class="text-xs-right">{{ row.item.type }}</td>
-            <td class="text-xs-right">{{ row.item.address }}</td>
-            <td class="text-xs-right">{{ row.item.latlong }}</td>
-            <td class="text-xs-right">{{ row.item.placeID }}</td>
             <td>
               <v-btn
                 class="mx-2"
@@ -46,31 +41,30 @@
 <script>
 export default {
   props: {
-    placeData: Array,
+    peopleData: Array,
   },
+
   data() {
     return {
       page: 1,
       pageCount: 0,
     };
   },
+
   computed: {
     headers() {
       return [
-        { text: "Name", value: "name" },
-        { text: "Phone Number", value: "phoneNumber" },
-        { text: "Email Address", value: "emailAddress" },
-        { text: "Catagory", value: "catagory" },
-        { text: "Type", value: "type" },
-        { text: "Address", value: "address" },
-        { text: "Latitude/Longtitude", value: "latlong" },
-        { text: "Google Place ID", value: "placeID" },
+        { text: "FIRST NAME", value: "firstName" },
+        { text: "LAST NAME", value: "lastName" },
+        { text: "ADDRESS", value: "address" },
+        { text: "PHONE NUMBER", value: "phoneNumber" },
+        { text: "EMAIL ADDRESS", value: "emailAddress" },
       ];
     },
   },
   methods: {
-    handleClick(place) {
-      this.$router.push({ path: `editplace/${place.uuid}` });
+    handleClick(person) {
+      this.$router.push({ path: `editperson/${person.uuid}` });
     },
   },
 };
@@ -78,17 +72,27 @@ export default {
 
 <style>
 td {
-  height: 100px !important;
+  height: 50px !important;  
+  border-bottom: none !important;
+  border-top: solid 1px #e1e1e1 !important;
+
+}
+
+th {
+    border: none 1px !important;
+}
+
+tr {
+  border: 0px none !important;
+  
 }
 
 .v-pagination {
   margin-top: 70px !important;
 }
 
-.v-data-table {
-  border-top: solid 1px #e1e1e1 !important;
-  border-bottom: solid 1px #e1e1e1 !important;
-
+.v-data-table {  
+  font-family: "Montserrat-Regular";
   border-radius: 0px;
 }
 </style>

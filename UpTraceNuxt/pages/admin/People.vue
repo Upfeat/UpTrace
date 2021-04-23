@@ -7,7 +7,7 @@
             </v-flex>
             <v-spacer></v-spacer>
             <div v-if="peopleData">
-                <PeopleTable :people-data="peopleData"/>
+                <AdminPeopleTable :people-data="peopleData"/>
 
             </div>
         </v-card>        
@@ -15,9 +15,7 @@
 </template>
 
 <script>
-import PeopleTable from '../../components/PeopleTable.vue'
 export default {
-  components: { PeopleTable },
   
     props:{
         data: Object

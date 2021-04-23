@@ -1,37 +1,39 @@
 <template>
   <v-app>
-    <v-container class="background">
-      <v-row>
-        <upfeat-logo-main />
-      </v-row>
-      <v-row align="start" justify="center">
-        <v-col>
-          <div class="top-text-title">
-            <div class="h4">{{ title }}</div>
-          </div>
-          <div class="top-text-subtitle">
-            <div
-              class="subtitle-1"
-              v-text="
-                'Instead of filling out forms everytime you visit a place, scan your QR code we provide for you to automatically generate your information'
-              "
-            ></div></div
-        ></v-col>
-      </v-row>
+    <div class="background">
+      <v-container>
+        <v-row>
+          <UpfeatLogo />
+        </v-row>
+        <v-row align="start" justify="center">
+          <v-col>
+            <div class="top-text-title">
+              <div class="h4">{{ title }}</div>
+            </div>
+            <div class="top-text-subtitle">
+              <div
+                class="subtitle-1"
+                v-text="
+                  'Instead of filling out forms everytime you visit a place, scan your QR code we provide for you to automatically generate your information'
+                "
+              ></div></div
+          ></v-col>
+        </v-row>
 
-      <v-row align="center" justify="center">
-        <div class="interface">
-          <UserInterface @update-title="updateTitle"/>
-        </div>
-      </v-row>
-    </v-container>
+        <v-row align="center" justify="center">
+          <div class="interface">
+            <UserInterface @update-title="updateTitle" />
+          </div>
+        </v-row>
+      </v-container>
+    </div>
   </v-app>
 </template>
  
       
 };
 <script>
-import upfeatLogo from "../components/upfeat-logo.vue";
+import upfeatLogo from "../components/Admin/AdminUpfeatLogo.vue";
 export default {
   components: { upfeatLogo },
   data() {
@@ -42,7 +44,7 @@ export default {
   },
   methods: {
     updateTitle(text) {
-      console.log("NEW TITLE FORREAL = " + text)
+      console.log("NEW TITLE FORREAL = " + text);
       this.title = text;
     },
   },

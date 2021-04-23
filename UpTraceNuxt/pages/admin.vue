@@ -4,15 +4,21 @@
     <NuxtChild :data="data" @refresh-data="refreshData" />
   </div>
   <div v-else-if="!loggedIn">
-    <Loading />
+    <v-row justify="center">
+      <v-col align-self="center">
+        <AdminLoading />
+
+      </v-col>
+    </v-row>
   </div>
 </template>
 
 <script>
-import Loading from "../components/Loading.vue";
+import AdminNavBar from '../components/Admin/AdminNavBar'
 export default {
-  components: { Loading },
-
+  components: {
+    AdminNavBar
+  },
   data() {
     return {
       propData: "not loaded",

@@ -8,7 +8,7 @@
     color="bluegray"
     dark
   >
-    <upfeat-logo />
+    <AdminUpfeatLogo />
     <v-list>
       <v-list-item :to="dashboard.to" router exact>
         <v-list-item-action>
@@ -49,16 +49,16 @@
         </v-col>
         <v-col md="3" >
           <v-flex class="text-left">
-          <v-btn icon type="button" @click="showCatagories"
+          <v-btn icon type="button" @click="showCategories"
             ><v-icon dark> mdi-chevron-down </v-icon></v-btn
           >
           </v-flex>
         </v-col>
       </v-row>
 
-      <v-list-item v-if="catagories" :to="placeCatagories.to" router exact>
+      <v-list-item v-if="categories" :to="placeCategories.to" router exact>
         <v-list-item-content>
-          <v-list-item-title v-text="placeCatagories.title" />
+          <v-list-item-title v-text="placeCategories.title" />
         </v-list-item-content>
       </v-list-item>
 
@@ -75,15 +75,13 @@
 </template>
 
 <script>
-import upfeatLogo from "../components/upfeat-logo.vue";
 export default {
-  components: { upfeatLogo },
   data() {
     return {
       clipped: false,
       drawer: true,
       fixed: false,
-      catagories: false,
+      categories: false,
 
       dashboard: {
         icon: "mdi-view-dashboard",
@@ -100,7 +98,7 @@ export default {
         title: "Place",
         to: "/admin/places",
       },
-      placeCatagories: {
+      placeCategories: {
         icon: "mdi-map",
         title: "Category",
         to: "/admin/placecategory",
@@ -118,8 +116,8 @@ export default {
     };
   },
   methods: {
-    showCatagories() {
-      this.catagories = !this.catagories;
+    showCategories() {
+      this.categories = !this.categories;
     },
   },
 };

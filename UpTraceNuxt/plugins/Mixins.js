@@ -44,16 +44,11 @@ if(!Vue.SAMLAuthenticate) {
                             console.log("It is undefined in mixin")
                         }
                         output.value = JSON.parse(output.value)
-                        console.log("OUTPUT VALUE = "+JSON.stringify(output))
                     } catch(error){
                         console.log("ERR VALUE = "+JSON.stringify(error))
                     }
                     if(typeof output !== undefined) {
                         if(typeof output==='object') {
-                            if(output.valid) {
-                                console.log("VALID JWT")
-                            }
-                            console.log("OUTPUT = "+ JSON.stringify(output))
                             return output 
                         } 
                         else {
@@ -74,11 +69,11 @@ if(!Vue.formatJsonBody) {
     Vue.formatJsonBody = true;
     Vue.mixin({
         methods: {
-            formatJsonBody(data, catagory, method) {
-                console.log(catagory,method)
+            formatJsonBody(data, category, method) {
+                console.log(category,method)
                 return {
                     data: data,
-                    action: `${catagory}/${method}`
+                    action: `${category}/${method}`
                 }
             }
         }
