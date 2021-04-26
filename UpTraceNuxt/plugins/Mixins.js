@@ -1,14 +1,18 @@
 import Vue from 'vue';
 
-if (!Vue.invokeCloudFunction) {
-    Vue.invokeCloudFunction = true
+if (!Vue.callAPI) {
+    Vue.callAPI = true
     Vue.mixin({
         methods : {
-            async invokeCloudFunction(method, url) {
+            async callAPI(method, url) {
                 try {
                     let data = await this.$axios({
                         method: method,
-                        url: url
+                        url: url,
+                        headers: {
+                            "Access-Control-Allow-Origin": '*',
+                            "Access-Control-Allow-Methods": 'GET'
+                        }
                     })
                     return data;
                 } catch(error) {
@@ -23,23 +27,56 @@ if(!Vue.SAMLAuthenticate) {
     Vue.SAMLAuthenticate = true;
     Vue.mixin({
         methods: {
-            async SAMLAuthenticate(httpMethod,functionName) {
+            async SAMLAuthenticate(httpMethod,jsonBody) {
                 try {
-                    let returnVal = await this.$axios({
+                    let axiosReturn;
+                    axiosReturn = await this.$axios({
                         method: httpMethod,
-                        url: `https://us-central1-attempt2-302520.cloudfunctions.net/acs-1?function=${functionName}`
+                        url: "https://us-central1-uptraceuofm.cloudfunctions.net/acs",
+                        withCredentials: true,
+                        data: jsonBody
                     })
-                    value = returnVal.data;
+                    let output;
 
-                    if(typeof JSON.parse(value)==='object') return JSON.parse(value)
-                    
-                    var url = new URL(value)
-                    if(url.protocol === 'http:' || url.protocol === 'https:') window.location.replace(returnVal.data)
+                    try {
+                        output = axiosReturn.data
+                        if(output === undefined) {
+                            console.log("It is undefined in mixin")
+                        }
+                        output.value = JSON.parse(output.value)
+                    } catch(error){
+                        console.log("ERR VALUE = "+JSON.stringify(error))
+                    }
+                    if(typeof output !== undefined) {
+                        if(typeof output==='object') {
+                            return output 
+                        } 
+                        else {
+                            window.location.replace(output)
+                        }
+                    }
 
                 } catch(error) {
-                    return error.response;
+                    console.log("ERROR CATCH:" + error + " + " + error.response )
+                    return {value: [], valid: false};
                 }
             }
         }
     })
 }
+
+if(!Vue.formatJsonBody) {
+    Vue.formatJsonBody = true;
+    Vue.mixin({
+        methods: {
+            formatJsonBody(data, category, method) {
+                console.log(category,method)
+                return {
+                    data: data,
+                    action: `${category}/${method}`
+                }
+            }
+        }
+    })
+}
+
